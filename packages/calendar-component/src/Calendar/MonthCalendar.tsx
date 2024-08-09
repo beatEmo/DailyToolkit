@@ -1,7 +1,15 @@
+import { useContext } from "react";
 import { Dayjs } from "dayjs";
+import cs from "classnames";
 import { CalendarProps } from ".";
+import CalendarLocal from "./locale/zh-CN";
+import LocaleContext from "./LocaleContext";
+import allLocales from "./locale";
 
-interface MonthCalendarProps extends CalendarProps {}
+interface MonthCalendarProps extends CalendarProps {
+  selectHandler?: (date: Dayjs) => void;
+  curMonth: Dayjs;
+}
 
 function getAllDays(date: Dayjs) {
   const daysInMonth = date.daysInMonth();
@@ -30,7 +38,13 @@ function getAllDays(date: Dayjs) {
   return daysInfo;
 }
 
-function renderDays(days: Array<{ date: Dayjs; currentMonth: boolean }>) {
+function renderDays(
+  days: Array<{ date: Dayjs; currentMonth: boolean }>,
+  dateRender: MonthCalendarProps["dateRender"],
+  dateInnerContent: MonthCalendarProps["dateInnerContent"],
+  value: Dayjs,
+  selectHandler?: MonthCalendarProps["selectHandler"]
+) {
   // 分行列渲染二维数组
   const rows = [];
   for (let i = 0; i < 6; i++) {
@@ -43,9 +57,29 @@ function renderDays(days: Array<{ date: Dayjs; currentMonth: boolean }>) {
             "calendar-month-body-cell " +
             (item.currentMonth ? "calendar-month-body-cell-current" : "")
           }
-          key={item.date.toString()}
+          onClick={() => {
+            selectHandler?.(item.date);
+          }}
         >
-          {item.date.date()}
+          {dateRender ? (
+            dateRender(item.date)
+          ) : (
+            <div className="calendar-month-body-cell-date">
+              <div
+                className={cs(
+                  "calendar-month-body-cell-date-value",
+                  item.date.format("YYYY-MM-DD") === value.format("YYYY-MM-DD")
+                    ? "calendar-month-body-cell-date-value-selected"
+                    : ""
+                )}
+              >
+                {item.date.date()}
+              </div>
+              <div className="calendar-month-body-cell-date-content">
+                {dateInnerContent?.(item.date)}
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -60,20 +94,43 @@ function renderDays(days: Array<{ date: Dayjs; currentMonth: boolean }>) {
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
-  const weekList = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+  const localeContext = useContext(LocaleContext);
 
-  const allDays = getAllDays(props.value);
+  const { value, dateRender, dateInnerContent, selectHandler, curMonth } =
+    props;
+
+  const CalendarLocale = allLocales[localeContext.locale];
+
+  const weekList = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+
+  const allDays = getAllDays(curMonth);
 
   return (
     <main className="calendar-month">
       <section className="calendar-month-week-list">
-        {weekList.map((week) => (
-          <div className="calendar-month-week-list-item" key={week}>
-            {week}
+        {weekList.map((week, index) => (
+          <div className="calendar-month-week-list-item" key={index}>
+            {CalendarLocale.week[week]}
           </div>
         ))}
       </section>
-      <section className="calendar-month-body">{renderDays(allDays)}</section>
+      <section className="calendar-month-body">
+        {renderDays(
+          allDays,
+          dateRender,
+          dateInnerContent,
+          value,
+          selectHandler
+        )}
+      </section>
     </main>
   );
 }
