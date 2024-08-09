@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Dayjs } from "dayjs";
 import cs from "classnames";
 import { CalendarProps } from ".";
-import CalendarLocal from "./locale/zh-CN";
 import LocaleContext from "./LocaleContext";
 import allLocales from "./locale";
 
@@ -12,7 +11,6 @@ interface MonthCalendarProps extends CalendarProps {
 }
 
 function getAllDays(date: Dayjs) {
-  const daysInMonth = date.daysInMonth();
   const startDate = date.startOf("month");
   const day = startDate.day();
 
@@ -38,61 +36,6 @@ function getAllDays(date: Dayjs) {
   return daysInfo;
 }
 
-function renderDays(
-  days: Array<{ date: Dayjs; currentMonth: boolean }>,
-  dateRender: MonthCalendarProps["dateRender"],
-  dateInnerContent: MonthCalendarProps["dateInnerContent"],
-  value: Dayjs,
-  selectHandler?: MonthCalendarProps["selectHandler"]
-) {
-  // 分行列渲染二维数组
-  const rows = [];
-  for (let i = 0; i < 6; i++) {
-    const row = [];
-    for (let j = 0; j < 7; j++) {
-      const item = days[i * 7 + j];
-      row[j] = (
-        <div
-          className={
-            "calendar-month-body-cell " +
-            (item.currentMonth ? "calendar-month-body-cell-current" : "")
-          }
-          onClick={() => {
-            selectHandler?.(item.date);
-          }}
-        >
-          {dateRender ? (
-            dateRender(item.date)
-          ) : (
-            <div className="calendar-month-body-cell-date">
-              <div
-                className={cs(
-                  "calendar-month-body-cell-date-value",
-                  item.date.format("YYYY-MM-DD") === value.format("YYYY-MM-DD")
-                    ? "calendar-month-body-cell-date-value-selected"
-                    : ""
-                )}
-              >
-                {item.date.date()}
-              </div>
-              <div className="calendar-month-body-cell-date-content">
-                {dateInnerContent?.(item.date)}
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-    rows.push(row);
-  }
-
-  return rows.map((row, index) => (
-    <div className="calendar-month-body-row" key={index}>
-      {row}
-    </div>
-  ));
-}
-
 function MonthCalendar(props: MonthCalendarProps) {
   const localeContext = useContext(LocaleContext);
 
@@ -113,6 +56,56 @@ function MonthCalendar(props: MonthCalendarProps) {
 
   const allDays = getAllDays(curMonth);
 
+  function renderDays(days: Array<{ date: Dayjs; currentMonth: boolean }>) {
+    // 分行列渲染二维数组
+    const rows = [];
+    for (let i = 0; i < 6; i++) {
+      const row = [];
+      for (let j = 0; j < 7; j++) {
+        const item = days[i * 7 + j];
+        row[j] = (
+          <div
+            className={
+              "calendar-month-body-cell " +
+              (item.currentMonth ? "calendar-month-body-cell-current" : "")
+            }
+            onClick={() => {
+              selectHandler?.(item.date);
+            }}
+          >
+            {dateRender ? (
+              dateRender(item.date)
+            ) : (
+              <div className="calendar-month-body-cell-date">
+                <div
+                  className={cs(
+                    "calendar-month-body-cell-date-value",
+                    item.date.format("YYYY-MM-DD") ===
+                      value.format("YYYY-MM-DD")
+                      ? "calendar-month-body-cell-date-value-selected"
+                      : ""
+                  )}
+                >
+                  {item.date.date()}
+                </div>
+                <div className="calendar-month-body-cell-date-content">
+                  {dateInnerContent?.(item.date)}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+      rows.push(row);
+    }
+
+    return rows.map((row, index) => (
+      <div className="calendar-month-body-row" key={index}>
+        {row}
+      </div>
+    ));
+  }
+
   return (
     <main className="calendar-month">
       <section className="calendar-month-week-list">
@@ -122,15 +115,7 @@ function MonthCalendar(props: MonthCalendarProps) {
           </div>
         ))}
       </section>
-      <section className="calendar-month-body">
-        {renderDays(
-          allDays,
-          dateRender,
-          dateInnerContent,
-          value,
-          selectHandler
-        )}
-      </section>
+      <section className="calendar-month-body">{renderDays(allDays)}</section>
     </main>
   );
 }

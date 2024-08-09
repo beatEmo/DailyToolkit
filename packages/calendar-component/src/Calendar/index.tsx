@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode, useState } from "react";
-import dayjs, { Dayjs, locale } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import MonthCalendar from "./MonthCalendar";
 import Header from "./Header";
 import "./index.scss";
@@ -24,12 +24,16 @@ function Calendar(props: CalendarProps) {
 
   const classNames = cs("calendar", propClassName);
 
-  // 日期cell 点击事件
-  const [curValue, setCurValue] = useState<Dayjs>(value);
-  function selectHandler(date: Dayjs) {
+  function changeDate(date: Dayjs) {
     setCurValue(date);
     setCurMonth(date);
     onChange?.(date);
+  }
+
+  // 日期cell 点击事件
+  const [curValue, setCurValue] = useState<Dayjs>(value);
+  function selectHandler(date: Dayjs) {
+    changeDate(date);
   }
 
   // header 切换日期
@@ -43,9 +47,7 @@ function Calendar(props: CalendarProps) {
   // 今天的处理事件
   function todayHandler() {
     const date = dayjs(Date.now());
-    setCurValue(date);
-    setCurMonth(date);
-    onChange?.(date);
+    changeDate(date);
   }
 
   return (
