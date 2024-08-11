@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const reportingObserver = new ReportingObserver(
+        (reports, observer) => {
+          for (const report of reports) {
+            console.log(report.body); //上报
+          }
+        },
+        { types: ["intervention", "deprecation"] }
+      );
+
+      reportingObserver.observe();
+    </script>
+  </body>
+</html>
