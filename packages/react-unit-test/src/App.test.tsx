@@ -1,6 +1,8 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, renderHook, screen } from "@testing-library/react";
 import App from "./App";
+import useCounter from "./useCounter";
+import { act } from "react-dom/test-utils";
 
 test("renders learn react link", () => {
   const { container } = render(<App />);
