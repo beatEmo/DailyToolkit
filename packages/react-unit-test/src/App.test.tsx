@@ -11,3 +11,18 @@ test("renders learn react link", () => {
   // const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });
+test("useCounter", async () => {
+  const utils = renderHook(() => useCounter(0));
+  const [count, increment, decrement] = utils.result.current;
+  act(() => {
+    increment(2);
+  });
+  expect(utils.result.current[0]).toBe(2);
+
+  act(() => {
+    decrement(3);
+  });
+  expect(utils.result.current[0]).toBe(-1);
+
+  utils.unmount();
+});
