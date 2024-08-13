@@ -13,7 +13,7 @@ interface MutateObserverProps {
   children: React.ReactElement;
 }
 
-const MutateObserver = (props: MutateObserverProps) => {
+const MutateObserver: React.FC<MutateObserverProps> = (props) => {
   const { options, onMutate = () => {}, children } = props;
 
   const elementRef = useRef<HTMLElement>(null);

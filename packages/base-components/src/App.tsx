@@ -1,5 +1,5 @@
 // import Example from "./example/Portal";
-import Example from "./example/MutateObserver";
+import Example from "./example/CopyToClipboard";
 
 function App() {
   return (
