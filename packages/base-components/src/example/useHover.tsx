@@ -1,9 +1,7 @@
-import React from "react";
-
 import useHover from "../hooks/useHover";
 
 function App() {
-  const [hoverable, isHovered] = useHover((hoverable: boolean) => (
+  const element = (hoverable: boolean) => (
     <div
       onMouseEnter={(e) => {
         console.log("enter", e);
@@ -11,7 +9,9 @@ function App() {
     >
       hover me{hoverable ? "hover" : ""}
     </div>
-  ));
+  );
+
+  const [hoverable, isHovered] = useHover(element);
   return (
     <>
       {hoverable}
