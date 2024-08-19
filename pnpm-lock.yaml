@@ -15,6 +15,7 @@ importers:
       '@vitejs/plugin-react': ^4.3.1
       ahooks: ^3.8.1
       copy-to-clipboard: ^3.3.3
+      dayjs: ^1.11.12
       eslint: ^9.8.0
       eslint-plugin-react-hooks: ^5.1.0-rc.0
       eslint-plugin-react-refresh: ^0.4.9
@@ -31,6 +32,7 @@ importers:
     dependencies:
       ahooks: registry.npmmirror.com/ahooks/3.8.1_react@18.3.1
       copy-to-clipboard: registry.npmmirror.com/copy-to-clipboard/3.3.3
+      dayjs: registry.npmmirror.com/dayjs/1.11.12
       js-cookie: registry.npmmirror.com/js-cookie/3.0.5
       prop-types: registry.npmmirror.com/prop-types/15.8.1
       react: registry.npmmirror.com/react/18.3.1
