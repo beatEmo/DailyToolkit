@@ -1,5 +1,5 @@
 // import Example from "./example/Portal";
-import Example from "./example/useCountDown";
+import Example from "./example/css-modules";
 
 function App() {
   return (
