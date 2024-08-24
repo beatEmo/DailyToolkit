@@ -1,5 +1,5 @@
 // import Example from "./example/Portal";
-import Example from "./example/css-modules";
+import Example from "./example/Icon";
 
 function App() {
   return (
