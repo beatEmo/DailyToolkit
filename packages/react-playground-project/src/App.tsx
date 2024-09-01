@@ -1,9 +1,9 @@
 import "./App.css";
-
+import Test from "./example/test-preview";
 function App() {
   return (
     <>
-      <h1>Welcome to React Playground</h1>
+      <Test />
     </>
   );
 }
