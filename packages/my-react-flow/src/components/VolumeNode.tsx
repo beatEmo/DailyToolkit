@@ -1,5 +1,6 @@
-import { FC } from "react";
+import { ChangeEventHandler, FC, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
+import audio from "../audio";
 
 interface VolumeNodeProps {
   id: string;
@@ -9,7 +10,11 @@ interface VolumeNodeProps {
 }
 
 const VolumeNode: FC<VolumeNodeProps> = ({ id, data }) => {
-  console.log("VolumeNode", id, data);
+  const [gain, setGain] = useState(data.gain);
+  const changeGain: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setGain(+e.target.value);
+    audio.updateAudio(id, { gain: +e.target.value });
+  };
 
   return (
     <>
@@ -20,8 +25,16 @@ const VolumeNode: FC<VolumeNodeProps> = ({ id, data }) => {
         </p>
         <div className="flex flex-col p-[8px]">
           <span>Gain</span>
-          <input type="range" min="0" max="1" step="0.01" value={data.gain} />
-          <span className="text-right">{data.gain.toFixed(2)}</span>
+          <input
+            className="nodrag"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={gain}
+            onChange={changeGain}
+          />
+          <span className="text-right">{gain.toFixed(2)}</span>
         </div>
         <Handle type="source" position={Position.Bottom} />
       </div>

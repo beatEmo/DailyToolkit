@@ -1,5 +1,6 @@
 import { Handle, Position } from "@xyflow/react";
-import { FC } from "react";
+import { ChangeEventHandler, FC, useState } from "react";
+import audio from "../audio";
 
 export interface OscillatorNodeProps {
   id: string;
@@ -10,7 +11,18 @@ export interface OscillatorNodeProps {
 }
 
 const OscillatorNode: FC<OscillatorNodeProps> = ({ id, data }) => {
-  const { frequency, type } = data;
+  const [frequency, setFrequency] = useState(data.frequency);
+  const [type, setType] = useState(data.type);
+
+  const changeFrequency: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setFrequency(+e.target.value);
+    audio.updateAudio(id, { frequency: +e.target.value });
+  };
+  const changeType: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setType(e.target.value);
+    audio.updateAudio(id, { type: e.target.value });
+  };
+
   return (
     <>
       <div className="bg-white shadow-xl" key={id}>
@@ -19,13 +31,20 @@ const OscillatorNode: FC<OscillatorNodeProps> = ({ id, data }) => {
         </p>
         <div className="flex flex-col p-[8px]">
           <span>频率</span>
-          <input type="range" min="10" max="1000" value={data.frequency} />
+          <input
+            className="nodrag"
+            type="range"
+            min="10"
+            max="1000"
+            value={frequency}
+            onChange={changeFrequency}
+          />
           <span className="text-right">{frequency}赫兹</span>
         </div>
         <hr className="mx-[4px]" />
         <div className="flex flex-col p-[8px]">
           <p>波形</p>
-          <select value={type}>
+          <select value={type} onChange={changeType}>
             <option value="sine">正弦波</option>
             <option value="triangle">三角波</option>
             <option value="sawtooth">锯齿波</option>
