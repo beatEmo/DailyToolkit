@@ -1,74 +1,87 @@
-import {
-  addEdge,
-  Background,
-  BackgroundVariant,
-  Connection,
-  Controls,
-  Edge,
-  MiniMap,
-  Node,
-  ReactFlow,
-  useEdgesState,
-  useNodesState,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import OscillatorNode from "./components/OscillatorNode";
-import VolumeNode from "./components/VolumeNode";
-import OutputNode from "./components/OutputNode";
-import audio from "./audio";
+import { styled, createGlobalStyle, css } from "styled-components";
 
-const initialNodes: Node[] = [
-  {
-    id: "a",
-    type: "osc",
-    data: { frequency: 220, type: "square" },
-    position: { x: 200, y: 0 },
-  },
-  {
-    id: "b",
-    type: "volume",
-    data: { gain: 0.5 },
-    position: { x: 150, y: 250 },
-  },
-  {
-    id: "c",
-    type: "out",
-    data: {},
-    position: { x: 350, y: 400 },
-  },
-];
-const initialEdges: Edge[] = [];
+function App() {
+  const keys: Record<string, { frequency: number }> = {
+    A: {
+      frequency: 196,
+    },
+    S: {
+      frequency: 220,
+    },
+    D: {
+      frequency: 246,
+    },
+    F: {
+      frequency: 261,
+    },
+    G: {
+      frequency: 293,
+    },
+    H: {
+      frequency: 329,
+    },
+    J: {
+      frequency: 349,
+    },
+    K: {
+      frequency: 392,
+    },
+  };
 
-const nodeTypes = {
-  osc: OscillatorNode,
-  volume: VolumeNode,
-  out: OutputNode,
-};
+  const GlobalStyles = createGlobalStyle`
+    body {
+      background: #000;
+    }
+  `;
 
-export default function App() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const KeysStyle = styled.div`
+    width: 800px;
+    height: 400px;
+    margin: 40px auto;
 
-  const onConnect = (params: Connection) => {
-    audio.connect(params.source, params.target);
-    setEdges((eds) => addEdge(params, eds));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: hidden;
+  `;
+  const textStyle = css`
+    line-height: 500px;
+    text-align: center;
+    font-size: 50px;
+  `;
+
+  const KeyStyle = styled.div`
+    border: 4px solid black;
+    background: #fff;
+    flex: 1;
+    ${textStyle}
+
+    &:hover {
+      background: #aaa;
+    }
+  `;
+
+  const play = (key: string) => {
+    const frequency = keys[key]?.frequency;
+    if (!frequency) {
+      return;
+    }
   };
 
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        fitView
-      >
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Lines} />
-      </ReactFlow>
-    </div>
+    <KeysStyle as="section">
+      {Object.keys(keys).map((item: any) => {
+        return (
+          <KeyStyle as="div" key={item}>
+            <div onClick={() => play(item)}>
+              <span>{item}</span>
+            </div>
+          </KeyStyle>
+        );
+      })}
+      <GlobalStyles />
+    </KeysStyle>
   );
 }
+
+export default App;

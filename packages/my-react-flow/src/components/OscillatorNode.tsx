@@ -51,7 +51,11 @@ const OscillatorNode: FC<OscillatorNodeProps> = ({ id, data }) => {
             <option value="square">方波</option>
           </select>
         </div>
-        <Handle type="source" position={Position.Bottom} />
+        <Handle
+          className="w-[10px] h-[10px]"
+          type="source"
+          position={Position.Bottom}
+        />
       </div>
     </>
   );

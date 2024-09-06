@@ -11,12 +11,18 @@ const VolumeNode: FC<OutputNodeProps> = ({ id }) => {
 
   const toggleAudio = () => {
     setIsRuning((isRuning) => !isRuning);
+    console.log(12);
+
     audio.toggleAudio();
   };
 
   return (
     <>
-      <Handle type="target" position={Position.Top} />
+      <Handle
+        className="w-[10px] h-[10px]"
+        type="target"
+        position={Position.Top}
+      />
       <div className="bg-white shadow-xl" key={id}>
         <p className="text-black p-[8px]">输出节点</p>
         <button onClick={toggleAudio}>
