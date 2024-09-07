@@ -1,9 +1,9 @@
-import "./App.css";
-import Test from "./example/test-preview";
+import ReactPlayground from "./ReactPlayground";
+
 function App() {
   return (
     <>
-      <Test />
+      <ReactPlayground />
     </>
   );
 }
