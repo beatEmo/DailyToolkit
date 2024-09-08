@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { KeyStyle, KeysStyle, GlobalStyles } from "./piano";
+import { KeyStyle, KeysStyle, GlobalStyles, ButtonStyle } from "./piano";
 function App() {
   const keys: Record<string, { frequency: number }> = {
     A: {
@@ -125,6 +125,26 @@ function App() {
     ];
     playMusic(music);
   }
+  function playSong3() {
+    const music = [
+      [1, 1000],
+      [7, 500],
+      [6, 500],
+      [6, 1000],
+      [5, 500],
+      [3, 500],
+      [3, 1000],
+      [3, 1500],
+      [2, 500],
+      [1, 500],
+      [6, 500],
+      [1, 1000],
+      [2, 500],
+      [3, 500],
+      [3, 1000],
+    ];
+    playMusic(music);
+  }
   return (
     <>
       <KeysStyle as="section">
@@ -139,10 +159,11 @@ function App() {
         })}
       </KeysStyle>
       <GlobalStyles />
-      <div className="songs">
+      <ButtonStyle>
         <button onClick={() => playSong1()}>世上只有妈妈好</button>
         <button onClick={() => playSong2()}>奢香夫人</button>
-      </div>
+        <button onClick={() => playSong3()}>偏爱</button>
+      </ButtonStyle>
     </>
   );
 }

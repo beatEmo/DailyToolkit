@@ -34,3 +34,9 @@ export const KeyStyle = styled.div`
     background: #aaa;
   }
 `;
+
+export const ButtonStyle = styled.button`
+  background: #000;
+  color: #fff;
+  border: none;
+`;
